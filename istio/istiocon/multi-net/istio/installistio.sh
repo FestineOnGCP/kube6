@@ -36,7 +36,7 @@ kubectl create secret generic cacerts -n istio-system \
 
 # Install istio iop profile on cluster1
 echo "Installing istio in $CLUSTER1_NAME..."
-kubectl --context="${CLUSTER1_CTX}" label namespace istio-system topology.istio.io/network=network1
+kubectl --context="${CLUSTER1_CTX}" label namespace istio-system topology.istio.io/network=md1-ccmk-naus1
 
 istioctl --context="${CLUSTER1_CTX}" install -f iop-clu1.yaml --skip-confirmation
 
@@ -45,7 +45,7 @@ kubectl --context="${CLUSTER1_CTX}" apply -n istio-system -f expose-mc-svcs.yaml
 
 # Install istio profile on cluster2
 echo "Installing istio in $CLUSTER2_NAME..."
-kubectl --context="${CLUSTER2_CTX}" label namespace istio-system topology.istio.io/network=network2
+kubectl --context="${CLUSTER2_CTX}" label namespace istio-system topology.istio.io/network=mp1-ccmk-naus1
 
 istioctl --context="${CLUSTER2_CTX}" install -f iop-clu2.yaml --skip-confirmation
 
@@ -57,14 +57,14 @@ kubectl --context="${CLUSTER2_CTX}" apply -n istio-system -f expose-mc-svcs.yaml
 
 # Enable Endpoint Discovery
 echo "Enable Endpoint Discovery..."
-istioctl x create-remote-secret \
+istioctl create-remote-secret \
     --context="${CLUSTER2_CTX}" \
-    --name=cluster2 \
-    --server=https://clu2-control-plane:6443 | \
+    --name="${CLUSTER2_NAME}" \
+    --server=https://"${CLUSTER2_NAME}"-control-plane:6443 | \
     kubectl apply -f - --context="${CLUSTER1_CTX}"
 
-istioctl x create-remote-secret \
+istioctl create-remote-secret \
     --context="${CLUSTER1_CTX}" \
-    --name=cluster1 \
-    --server=https://clu1-control-plane:6443 | \
+    --name="${CLUSTER1_NAME}"\
+    --server=https://"${CLUSTER1_NAME}"-control-plane:6443 | \
     kubectl apply -f - --context="${CLUSTER2_CTX}"

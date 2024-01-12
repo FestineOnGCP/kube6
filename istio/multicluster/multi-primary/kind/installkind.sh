@@ -7,8 +7,8 @@ then
   exit 1
 fi
 
-CLUSTER1_NAME=clu1
-CLUSTER2_NAME=clu2
+CLUSTER1_NAME=gcs-mom
+CLUSTER2_NAME=gcs-mom-dev
 
 
 # Create cluster1 cluster
