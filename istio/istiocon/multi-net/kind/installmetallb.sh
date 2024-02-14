@@ -47,6 +47,8 @@ metadata:
   namespace: metallb-system
 EOF
 
+sleep 20
+
 echo "creating metallb l2 pool on $CLUSTER2_NAME..."
 kubectl apply --context="${CLUSTER2_CTX}" -f - <<EOF
 ---

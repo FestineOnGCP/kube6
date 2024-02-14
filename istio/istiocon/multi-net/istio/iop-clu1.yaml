@@ -51,15 +51,15 @@ spec:
               port: 15017
               targetPort: 15017
 
-    pilot:
-      k8s:
-        env:
-          - name: PILOT_TRACE_SAMPLING
-            value: "100"
-        resources:
-          requests:
-            cpu: 10m
-            memory: 100Mi
+    # pilot:
+    #   k8s:
+    #     env:
+    #       - name: PILOT_TRACE_SAMPLING
+    #         value: "100"
+    #     resources:
+    #       requests:
+    #         cpu: 10m
+    #         memory: 100Mi
 
   values:
     global:
@@ -73,8 +73,8 @@ spec:
             cpu: 10m
             memory: 40Mi
 
-    pilot:
-      autoscaleEnabled: false
+    # pilot:
+    #   autoscaleEnabled: false
 
     gateways:
       istio-egressgateway:
