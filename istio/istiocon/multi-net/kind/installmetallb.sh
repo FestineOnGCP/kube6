@@ -25,7 +25,7 @@ kubectl apply --context="${CLUSTER2_CTX}" -f https://raw.githubusercontent.com/m
 # wait for metallb to get ready
 echo "Wait 20 sec for metallb to get ready..."
 
-sleep 20
+sleep 30
 
 #create metallb pool and L2 advertisment
 echo "creating metallb l2 pool on $CLUSTER1_NAME..."
@@ -47,7 +47,7 @@ metadata:
   namespace: metallb-system
 EOF
 
-sleep 20
+sleep 30
 
 echo "creating metallb l2 pool on $CLUSTER2_NAME..."
 kubectl apply --context="${CLUSTER2_CTX}" -f - <<EOF

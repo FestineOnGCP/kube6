@@ -3,7 +3,9 @@ kind: IstioOperator
 spec:
   profile: default
   meshConfig:
-    trustDomain: mp1-ccmk-naus1.com
+    trustDomain: md1-ccmk-naus1.com
+    trustDomainAliases:
+    - mp1-ccmk-naus1.com
     defaultConfig:
       proxyMetadata:
         # Enable basic DNS proxying
@@ -67,7 +69,7 @@ spec:
       label:
         istio: eastwestgateway
         app: istio-eastwestgateway
-        topology.istio.io/network: mp1-ccmk-naus1
+        topology.istio.io/network: md1-ccmk-naus1
         spiffe.io/spire-managed-identity: "true"
       enabled: true
       k8s:
@@ -78,7 +80,7 @@ spec:
         env:
         # traffic through this gateway should be routed inside the network
         - name: ISTIO_META_REQUESTED_NETWORK_VIEW
-          value: mp1-ccmk-naus1
+          value: md1-ccmk-naus1
         service:
           ports:
           - name: status-port
@@ -131,22 +133,26 @@ spec:
                 done
                 ls -l ${CHECK_FILE}
 
-    # pilot:
-    #   k8s:
-    #     env:
-    #       - name: PILOT_TRACE_SAMPLING
-    #         value: "100"
-    #     resources:
-    #       requests:
-    #         cpu: 10m
-    #         memory: 100Mi
+    pilot:
+      k8s:
+        env:
+          # Disable istiod CA Sever functionality
+          # - name: ENABLE_CA_SERVER
+          #   value: "true"
+          - name: PILOT_TRACE_SAMPLING
+            value: "100"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 100Mi
 
   values:
     global:
+      # caAddress: https://172.18.255.111:8443
       meshID: dev
       multiCluster:
-        clusterName: gcs-mom
-      network: mp1-ccmk-naus1
+        clusterName: gcs-mom-dev
+      network: md1-ccmk-naus1
       proxy:
         resources:
           requests:
@@ -168,8 +174,8 @@ spec:
                   driver: "csi.spiffe.io"
                   readOnly: true
 
-    # pilot:
-    #   autoscaleEnabled: false
+    pilot:
+      autoscaleEnabled: false
 
     gateways:
       istio-egressgateway:

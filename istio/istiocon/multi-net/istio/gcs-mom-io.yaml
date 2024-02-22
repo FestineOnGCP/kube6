@@ -4,6 +4,8 @@ spec:
   profile: default
   meshConfig:
     trustDomain: mp1-ccmk-naus1.com
+    trustDomainAliases:
+    - md1-ccmk-naus1.com
     defaultConfig:
       proxyMetadata:
         # Enable basic DNS proxying
@@ -130,19 +132,22 @@ spec:
                   sleep 15
                 done
                 ls -l ${CHECK_FILE}
-
-    # pilot:
-    #   k8s:
-    #     env:
-    #       - name: PILOT_TRACE_SAMPLING
-    #         value: "100"
-    #     resources:
-    #       requests:
-    #         cpu: 10m
-    #         memory: 100Mi
+    pilot:
+      k8s:
+        env:
+        #   # Disable istiod CA Sever functionality
+        #   - name: ENABLE_CA_SERVER
+        #     value: "false"
+          - name: PILOT_TRACE_SAMPLING
+            value: "100"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 100Mi
 
   values:
     global:
+      # caAddress: https://172.18.255.121:8443
       meshID: dev
       multiCluster:
         clusterName: gcs-mom
@@ -168,8 +173,8 @@ spec:
                   driver: "csi.spiffe.io"
                   readOnly: true
 
-    # pilot:
-    #   autoscaleEnabled: false
+    pilot:
+      autoscaleEnabled: false
 
     gateways:
       istio-egressgateway:

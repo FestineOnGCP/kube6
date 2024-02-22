@@ -22,4 +22,5 @@ CLUSTER2_CTX=kind-gcs-mom
 
 #istio version
 HUB=docker.io/istio
-TAG=1.18.2
+# TAG=1.18.2
+TAG=1.20.2
